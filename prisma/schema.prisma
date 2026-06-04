@@ -1,0 +1,32 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Таблиця працівників
+model Worker {
+  id          Int       @id @default(autoincrement())
+  telegramId  BigInt    @unique // ID чату в телеграмі (BigInt, бо ліміти ТГ великі)
+  firstName   String
+  lastName    String?
+  createdAt   DateTime  @default(now())
+  
+  // Зв'язок: один працівник може мати багато записів годин
+  timeLogs    TimeLog[]
+}
+
+// Таблиця відпрацьованих годин
+model TimeLog {
+  id        Int      @id @default(autoincrement())
+  date      DateTime // Дата зміни
+  hours     Float    // Кількість годин (Float, бо може бути 10.5 годин)
+  workerId  Int
+  createdAt DateTime @default(now())
+
+  // Посилання на таблицю Worker
+  worker    Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+}
