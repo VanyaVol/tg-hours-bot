@@ -26,3 +26,13 @@ msg-lang-changed = 🇬🇧 Language successfully changed to English!
 msg-notifications-info = 🔔 Here you can set up daily reminders.
 msg-help = 🆘 Help:\nIf you have any problems, please contact your coordinator.
 msg-unknown = I don't understand this command. Please use the menu below.
+
+msg-choose-date = 📅 Please choose a date to enter hours:
+btn-cancel = ❌ Cancel
+calendar-months = January_February_March_April_May_June_July_August_September_October_November_December
+calendar-weekdays = Mo_Tu_We_Th_Fr_Sa_Su
+
+msg-select-hours = ⏱️ Select the number of hours worked for the { $date }th, or press "Did not work":
+btn-did-not-work = 🚫 Did not work
+msg-hours-saved = ✅ Successfully saved! Date: { $date }, Hours: { $hours }.
+msg-status-not-working = 💤 Recorded: you did not work on the { $date }th.

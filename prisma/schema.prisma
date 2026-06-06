@@ -7,6 +7,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 // Таблиця працівників
 model Worker {
   id          Int       @id @default(autoincrement())
@@ -17,7 +23,14 @@ model Worker {
   language   String   @default("uk") // <--- ОБОВ'ЯЗКОВО ДОДАЙ ЦЕЙ РЯДОК!
   notificationsEnabled Boolean @default(true) // Чи увімкнені сповіщення взагалі
   notificationTime  String    @default("18:00") // Час сповіщення у форматі "HH:MM"
-  
+  notificationInterval Int       @default(1) 
+  currentStep String?   // <-- ДОДАЙ ЦЕ ПОЛЕ ДЛЯ ЗБЕРЕЖЕННЯ СТЕЙТУ
+  calendarView        String    @default("LIST") // "LIST" або "IMAGE"
+  allowCorrections     Boolean             @default(true)  // Чи дозволено коригування
+  allowLeaves          Boolean             @default(true)  // Чи дозволено відпустки/лікарняні
+
+  correctionRequests   CorrectionRequest[]
+
   // Зв'язок: один працівник може мати багато записів годин
   timeLogs    TimeLog[]
 }
@@ -32,4 +45,17 @@ model TimeLog {
 
   // Посилання на таблицю Worker
   worker    Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+}
+
+
+
+model CorrectionRequest {
+  id          Int           @id @default(autoincrement())
+  workerId    Int
+  worker      Worker        @relation(fields: [workerId], references: [id])
+  date        DateTime      // Яку дату хоче змінити
+  hours       Float         // Кількість годин, яку хоче поставити
+  comment     String?       // Причина коригування
+  status      RequestStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
 }
